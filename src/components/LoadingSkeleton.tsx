@@ -1,26 +1,14 @@
-import { useEffect } from "react";
 import { View } from "react-native";
-import Animated, {
-  Easing,
-  useAnimatedStyle,
-  useSharedValue,
-  withRepeat,
-  withTiming,
-} from "react-native-reanimated";
+import Animated from "react-native-reanimated";
+import usePulse from "../hooks/usePulse";
 
-const usePulse = () => {
-  const opacity = useSharedValue(0.5);
-  useEffect(() => {
-    opacity.value = withRepeat(
-      withTiming(1, { duration: 900, easing: Easing.inOut(Easing.ease) }),
-      -1,
-      true,
-    );
-  }, [opacity]);
-  return useAnimatedStyle(() => ({ opacity: opacity.value }));
-};
-
-const Block = ({ className, style }: { className?: string; style?: object }) => {
+const Block = ({
+  className,
+  style,
+}: {
+  className?: string;
+  style?: object;
+}) => {
   const pulse = usePulse();
   return (
     <Animated.View
@@ -30,7 +18,7 @@ const Block = ({ className, style }: { className?: string; style?: object }) => 
   );
 };
 
-export function LoadingSkeleton() {
+const LoadingSkeleton = () => {
   return (
     <View className="gap-5">
       <Block className="h-56" />
@@ -50,4 +38,6 @@ export function LoadingSkeleton() {
       </View>
     </View>
   );
-}
+};
+
+export default LoadingSkeleton;

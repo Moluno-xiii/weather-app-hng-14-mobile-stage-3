@@ -18,12 +18,24 @@ interface Cell {
   icon: React.ComponentProps<typeof Ionicons>["name"];
 }
 
-export function CurrentDetailsGrid({ data }: Props) {
+const CurrentDetailsGrid = ({ data }: Props) => {
   const cells: Cell[] = [
-    { label: "Humidity", value: formatHumidity(data.humidity), icon: "water-outline" },
+    {
+      label: "Humidity",
+      value: formatHumidity(data.humidity),
+      icon: "water-outline",
+    },
     { label: "Wind", value: formatWind(data.windSpeed), icon: "leaf-outline" },
-    { label: "Feels like", value: formatTemp(data.feelsLike), icon: "thermometer-outline" },
-    { label: "Pressure", value: formatPressure(data.pressure), icon: "speedometer-outline" },
+    {
+      label: "Feels like",
+      value: formatTemp(data.feelsLike),
+      icon: "thermometer-outline",
+    },
+    {
+      label: "Pressure",
+      value: formatPressure(data.pressure),
+      icon: "speedometer-outline",
+    },
   ];
 
   return (
@@ -54,4 +66,6 @@ export function CurrentDetailsGrid({ data }: Props) {
       ))}
     </View>
   );
-}
+};
+
+export default CurrentDetailsGrid;

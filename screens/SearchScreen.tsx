@@ -1,50 +1,60 @@
-import { useMemo, useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
 import {
+  ActivityIndicator,
   Pressable,
   ScrollView,
   Text,
   TextInput,
   View,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import Animated, { FadeInDown } from "react-native-reanimated";
-import {
-  mockRecent,
-  mockSearchSuggestions,
-} from "../src/lib/mockWeather";
-import type { SearchStackParamList } from "../navigators/SearchStackNavigator";
-
-type Nav = NativeStackNavigationProp<SearchStackParamList, "Search">;
+import type { SearchStackNavigatorProp } from "../navigators/SearchStackNavigator";
+import NoResults from "../src/components/searchScreen/NoResults";
+import RecentSearches from "../src/components/searchScreen/RecentSearches";
+import SuggestionsList from "../src/components/searchScreen/SuggestionsList";
+import useDebounce from "../src/hooks/useDebounce";
+import useGeocode from "../src/hooks/useGeocode";
+import useRecentSearches from "../src/hooks/useRecentSearches";
+import { MIN_SEARCH_QUERY_LENGTH } from "../src/lib/constants";
 
 const SearchScreen = () => {
+  const {
+    items: recentSearches,
+    add: addRecent,
+    clear: clearRecent,
+  } = useRecentSearches();
   const [query, setQuery] = useState("");
-  const navigation = useNavigation<Nav>();
-
-  const suggestions = useMemo(() => {
-    if (query.trim().length < 2) return [];
-    return mockSearchSuggestions.filter((s) =>
-      s.name.toLowerCase().startsWith(query.toLowerCase().slice(0, 3)),
-    );
-  }, [query]);
-
-  const showRecent = query.trim().length === 0;
-  const showNoResults = query.trim().length >= 2 && suggestions.length === 0;
-
+  const debouncedQuery = useDebounce(query, 300);
+  const { suggestions, isLoading, isError, enabled } =
+    useGeocode(debouncedQuery);
   const goToCity = (params: {
     name: string;
     country: string;
     lat: number;
     lon: number;
-  }) => navigation.navigate("CityResult", params);
+  }) => {
+    addRecent(params);
+    navigation.navigate("CityResult", params);
+  };
+  const navigation = useNavigation<SearchStackNavigatorProp>();
+
+  const trimmed = query.trim();
+  const showHint =
+    trimmed.length > 0 && trimmed.length < MIN_SEARCH_QUERY_LENGTH;
+  const showNoResults =
+    enabled && !isLoading && !isError && suggestions.length === 0;
 
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-canvas">
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 32, gap: 20 }}
+        contentContainerStyle={{
+          paddingHorizontal: 20,
+          paddingBottom: 32,
+          gap: 20,
+        }}
         keyboardShouldPersistTaps="handled"
       >
         <View className="pt-2">
@@ -78,111 +88,46 @@ const SearchScreen = () => {
             className="flex-1 text-base text-ink"
             style={{ paddingVertical: 0 }}
           />
-          {query.length > 0 && (
+          {isLoading ? (
+            <ActivityIndicator size="small" color="#6B6F78" />
+          ) : query.length > 0 ? (
             <Pressable onPress={() => setQuery("")} hitSlop={8}>
               <Ionicons name="close-circle" size={18} color="#6B6F78" />
             </Pressable>
-          )}
+          ) : null}
         </View>
 
-        {suggestions.length > 0 && (
-          <View>
-            <Text
-              style={{ letterSpacing: 1.5 }}
-              className="text-ink-muted text-[10px] uppercase font-semibold mb-3 px-1"
-            >
-              Suggestions
-            </Text>
-            <View className="gap-2">
-              {suggestions.map((s, i) => (
-                <Animated.View
-                  key={`${s.name}-${s.country}-${i}`}
-                  entering={FadeInDown.delay(i * 60).springify().damping(16)}
-                >
-                  <Pressable
-                    onPress={() =>
-                      goToCity({
-                        name: s.name,
-                        country: s.country,
-                        lat: s.lat,
-                        lon: s.lon,
-                      })
-                    }
-                    style={{ borderCurve: "continuous" }}
-                    className="flex-row items-center justify-between bg-white/70 border border-canvas-border rounded-2xl px-4 py-3"
-                    android_ripple={{ color: "rgba(14,15,18,0.05)" }}
-                  >
-                    <View className="flex-1 pr-3">
-                      <Text className="text-ink text-base font-semibold">
-                        {s.name}
-                      </Text>
-                      <Text className="text-ink-muted text-xs mt-0.5">
-                        {[s.state, s.country].filter(Boolean).join(" · ")}
-                      </Text>
-                    </View>
-                    <Ionicons name="chevron-forward" size={16} color="#6B6F78" />
-                  </Pressable>
-                </Animated.View>
-              ))}
-            </View>
-          </View>
-        )}
-
-        {showNoResults && (
-          <View className="items-center py-10">
-            <Ionicons name="search-outline" size={28} color="#6B6F78" />
-            <Text className="text-ink text-base font-semibold mt-3">
-              No matches for "{query}"
-            </Text>
-            <Text className="text-ink-muted text-sm mt-1 text-center max-w-xs">
-              Check the spelling or try a nearby city name.
-            </Text>
-          </View>
-        )}
-
-        {showRecent && (
-          <View>
-            <Text
-              style={{ letterSpacing: 1.5 }}
-              className="text-ink-muted text-[10px] uppercase font-semibold mb-3 px-1"
-            >
-              Recent
-            </Text>
-            <View className="gap-2">
-              {mockRecent.map((c) => (
-                <Pressable
-                  key={`${c.name}-${c.country}`}
-                  onPress={() =>
-                    goToCity({
-                      name: c.name,
-                      country: c.country,
-                      lat: c.lat,
-                      lon: c.lon,
-                    })
-                  }
-                  style={{ borderCurve: "continuous" }}
-                  className="flex-row items-center justify-between bg-white/55 border border-canvas-border rounded-2xl px-4 py-3"
-                  android_ripple={{ color: "rgba(14,15,18,0.05)" }}
-                >
-                  <View className="flex-row items-center gap-3">
-                    <Ionicons name="time-outline" size={16} color="#6B6F78" />
-                    <Text className="text-ink text-base font-semibold">
-                      {c.name}
-                    </Text>
-                    <Text className="text-ink-muted text-xs">{c.country}</Text>
-                  </View>
-                  <Ionicons name="chevron-forward" size={16} color="#6B6F78" />
-                </Pressable>
-              ))}
-            </View>
-          </View>
-        )}
-
-        {showRecent && (
-          <Text className="text-ink-muted text-[11px] text-center mt-2">
-            Type at least 2 characters to search.
+        {showHint && (
+          <Text className="text-ink-muted text-[12px] px-1">
+            Type at least {MIN_SEARCH_QUERY_LENGTH} characters to search.
           </Text>
         )}
+
+        {isError && (
+          <View className="items-center py-8">
+            <Ionicons name="alert-circle-outline" size={26} color="#A53C12" />
+            <Text className="text-ink text-base font-semibold mt-3">
+              Couldn't reach OpenWeatherMap
+            </Text>
+            <Text className="text-ink-muted text-sm mt-1 text-center max-w-xs">
+              Check your connection and try again.
+            </Text>
+          </View>
+        )}
+
+        <SuggestionsList
+          query={query}
+          suggestions={suggestions}
+          goToCity={goToCity}
+        />
+        {showNoResults && <NoResults trimmed={trimmed} />}
+
+        <RecentSearches
+          query={query}
+          clearRecent={clearRecent}
+          recentSearches={recentSearches}
+          goToCity={goToCity}
+        />
       </ScrollView>
     </SafeAreaView>
   );

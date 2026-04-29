@@ -2,15 +2,15 @@ import { View, Text } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import type { CurrentWeather } from "../types/weather";
-import { gradientForGroup, iconForCode } from "../lib/weatherIcons";
+import { gradientForTemp, iconForCode } from "../lib/weatherIcons";
 import { formatTemp } from "../lib/formatters";
 
 interface Props {
   data: CurrentWeather;
 }
 
-export function WeatherHeader({ data }: Props) {
-  const [c1, c2, c3] = gradientForGroup(data.group);
+const WeatherHeader = ({ data }: Props) => {
+  const [c1, c2, c3] = gradientForTemp(data.temp);
   return (
     <LinearGradient
       colors={[c1, c2, c3]}
@@ -87,4 +87,6 @@ export function WeatherHeader({ data }: Props) {
       </View>
     </LinearGradient>
   );
-}
+};
+
+export default WeatherHeader;

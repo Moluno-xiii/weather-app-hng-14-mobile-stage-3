@@ -18,7 +18,11 @@ interface Props {
 
 const COPY: Record<
   ErrorKind,
-  { icon: React.ComponentProps<typeof Ionicons>["name"]; title: string; body: string }
+  {
+    icon: React.ComponentProps<typeof Ionicons>["name"];
+    title: string;
+    body: string;
+  }
 > = {
   offline: {
     icon: "cloud-offline-outline",
@@ -52,7 +56,7 @@ const COPY: Record<
   },
 };
 
-export function ErrorState({ kind, onRetry, secondary, isOnline = true }: Props) {
+const ErrorState = ({ kind, onRetry, secondary, isOnline = true }: Props) => {
   const { icon, title, body } = COPY[kind];
   const retryDisabled = !isOnline && kind !== "permissionDenied";
   return (
@@ -82,7 +86,10 @@ export function ErrorState({ kind, onRetry, secondary, isOnline = true }: Props)
           <Pressable
             onPress={onRetry}
             disabled={retryDisabled}
-            style={{ borderCurve: "continuous", opacity: retryDisabled ? 0.5 : 1 }}
+            style={{
+              borderCurve: "continuous",
+              opacity: retryDisabled ? 0.5 : 1,
+            }}
             className="bg-ink rounded-full px-6 py-3"
             android_ripple={{ color: "rgba(255,255,255,0.15)" }}
           >
@@ -106,4 +113,6 @@ export function ErrorState({ kind, onRetry, secondary, isOnline = true }: Props)
       </View>
     </View>
   );
-}
+};
+
+export default ErrorState;
