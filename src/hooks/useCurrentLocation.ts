@@ -32,7 +32,6 @@ const useCurrentLocation = (): UseCurrentLocationResult => {
       const position = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.Highest,
       });
-      console.log("current position", position.coords);
       setCoords({
         lat: position.coords.latitude,
         lon: position.coords.longitude,

@@ -13,6 +13,17 @@ Built for the HNG 14 Mobile Track Stage 3 task.
 - **Per-day expand/collapse** — tap a forecast row to reveal that day's hourly slots, with an animated chevron and Reanimated `LinearTransition` for the row resize.
 - **Offline-aware data layer** — React Query cache + NetInfo wired into `onlineManager` so requests pause/resume with connectivity.
 
+## Animations
+
+All animations run on the UI thread via `react-native-reanimated` v4 + `react-native-worklets`.
+
+- **Forecast list entrance** — each day in the 5-day list fades + slides in with `FadeInDown.delay(i * 80).springify().damping(14)` for a staggered cascade on mount.
+- **Forecast row expand / collapse** — tapping a day toggles its hourly mini-strip. The row's resize is animated with `LinearTransition.springify().damping(18)`, and the chevron rotates 0° → 180° via a `useSharedValue` + `useAnimatedStyle` driven by `withTiming` (220 ms).
+- **Search suggestions entrance** — autocomplete results fade in one-by-one with `FadeInDown.delay(i * 60).springify().damping(16)` as the query resolves.
+- **Offline banner** — slides in from the top via `SlideInUp.duration(220)` when connectivity drops and exits with `SlideOutUp.duration(180)` when it returns.
+- **Loading skeleton pulse** — placeholder blocks pulse opacity 0.5 ↔ 1.0 via `withRepeat(withTiming(...), -1, true)` while data is in flight.
+- **Screen transitions** — native-stack push/pop animations between the Search screen and the City result screen (provided by `@react-navigation/native-stack`).
+
 ## Screenshots
 
 | Search suggestions                                           | Remote search results                                                      |
