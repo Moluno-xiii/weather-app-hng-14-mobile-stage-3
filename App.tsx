@@ -1,3 +1,4 @@
+import "./global.css";
 import NetInfo from "@react-native-community/netinfo";
 import { NavigationContainer } from "@react-navigation/native";
 import {
@@ -6,10 +7,11 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
+import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { AppState, Platform } from "react-native";
-import "./global.css";
-import RootNavigator from "./navigtators/RootNavigator";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import RootNavigator from "./navigators/RootNavigator";
 
 onlineManager.setEventListener((setOnline) => {
   return NetInfo.addEventListener((state) => {
@@ -22,7 +24,9 @@ function onAppStateChange(status: string) {
     focusManager.setFocused(status === "active");
   }
 }
+
 const queryClient = new QueryClient();
+
 export default function App() {
   useEffect(() => {
     const subscription = AppState.addEventListener("change", onAppStateChange);
@@ -30,10 +34,13 @@ export default function App() {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <NavigationContainer>
-        <RootNavigator />
-      </NavigationContainer>
-    </QueryClientProvider>
+    <SafeAreaProvider>
+      <QueryClientProvider client={queryClient}>
+        <NavigationContainer>
+          <StatusBar style="dark" />
+          <RootNavigator />
+        </NavigationContainer>
+      </QueryClientProvider>
+    </SafeAreaProvider>
   );
 }
