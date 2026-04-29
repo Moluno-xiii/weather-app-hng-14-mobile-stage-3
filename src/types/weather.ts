@@ -1,15 +1,24 @@
-export type WeatherIconCode =
-  | "01d" | "01n"
-  | "02d" | "02n"
-  | "03d" | "03n"
-  | "04d" | "04n"
-  | "09d" | "09n"
-  | "10d" | "10n"
-  | "11d" | "11n"
-  | "13d" | "13n"
-  | "50d" | "50n";
+type WeatherIconCode =
+  | "01d"
+  | "01n"
+  | "02d"
+  | "02n"
+  | "03d"
+  | "03n"
+  | "04d"
+  | "04n"
+  | "09d"
+  | "09n"
+  | "10d"
+  | "10n"
+  | "11d"
+  | "11n"
+  | "13d"
+  | "13n"
+  | "50d"
+  | "50n";
 
-export type ConditionGroup =
+type ConditionGroup =
   | "clear-day"
   | "clear-night"
   | "cloudy"
@@ -18,7 +27,7 @@ export type ConditionGroup =
   | "storm"
   | "mist";
 
-export interface CurrentWeather {
+type CurrentWeather = {
   city: string;
   country: string;
   temp: number;
@@ -32,15 +41,15 @@ export interface CurrentWeather {
   tempMin: number;
   tempMax: number;
   observedAt: string;
-}
+};
 
-export interface HourlySlot {
+type HourlySlot = {
   time: string;
   temp: number;
   iconCode: WeatherIconCode;
-}
+};
 
-export interface DailyForecast {
+type DailyForecast = {
   dayLabel: string;
   fullDate: string;
   tempMin: number;
@@ -48,4 +57,12 @@ export interface DailyForecast {
   condition: string;
   iconCode: WeatherIconCode;
   hourly: HourlySlot[];
-}
+};
+
+export type {
+  WeatherIconCode,
+  ConditionGroup,
+  CurrentWeather,
+  HourlySlot,
+  DailyForecast,
+};

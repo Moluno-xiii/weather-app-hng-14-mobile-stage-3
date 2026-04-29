@@ -9,7 +9,7 @@ interface Props {
   title?: string;
 }
 
-export function HourlyStrip({ data, title = "Next 24 hours" }: Props) {
+const HourlyStrip = ({ data, title = "Next 24 hours" }: Props) => {
   return (
     <View>
       <Text
@@ -35,7 +35,11 @@ export function HourlyStrip({ data, title = "Next 24 hours" }: Props) {
             >
               {item.time}
             </Text>
-            <Ionicons name={iconForCode(item.iconCode)} size={20} color="#2A2C33" />
+            <Ionicons
+              name={iconForCode(item.iconCode)}
+              size={20}
+              color="#2A2C33"
+            />
             <Text
               selectable
               className="text-ink text-base font-semibold mt-2"
@@ -48,4 +52,6 @@ export function HourlyStrip({ data, title = "Next 24 hours" }: Props) {
       />
     </View>
   );
-}
+};
+
+export default HourlyStrip;

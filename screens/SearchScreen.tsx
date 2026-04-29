@@ -1,27 +1,15 @@
-import { useMemo, useState } from "react";
-import {
-  Pressable,
-  ScrollView,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useMemo, useState } from "react";
+import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
-import {
-  mockRecent,
-  mockSearchSuggestions,
-} from "../src/lib/mockWeather";
-import type { SearchStackParamList } from "../navigators/SearchStackNavigator";
-
-type Nav = NativeStackNavigationProp<SearchStackParamList, "Search">;
+import { SafeAreaView } from "react-native-safe-area-context";
+import type { SearchStackNavigatorProp } from "../navigators/SearchStackNavigator";
+import { mockRecent, mockSearchSuggestions } from "../src/lib/mockWeather";
 
 const SearchScreen = () => {
   const [query, setQuery] = useState("");
-  const navigation = useNavigation<Nav>();
+  const navigation = useNavigation<SearchStackNavigatorProp>();
 
   const suggestions = useMemo(() => {
     if (query.trim().length < 2) return [];
@@ -44,7 +32,11 @@ const SearchScreen = () => {
     <SafeAreaView edges={["top"]} className="flex-1 bg-canvas">
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 32, gap: 20 }}
+        contentContainerStyle={{
+          paddingHorizontal: 20,
+          paddingBottom: 32,
+          gap: 20,
+        }}
         keyboardShouldPersistTaps="handled"
       >
         <View className="pt-2">
@@ -97,7 +89,9 @@ const SearchScreen = () => {
               {suggestions.map((s, i) => (
                 <Animated.View
                   key={`${s.name}-${s.country}-${i}`}
-                  entering={FadeInDown.delay(i * 60).springify().damping(16)}
+                  entering={FadeInDown.delay(i * 60)
+                    .springify()
+                    .damping(16)}
                 >
                   <Pressable
                     onPress={() =>
@@ -120,7 +114,11 @@ const SearchScreen = () => {
                         {[s.state, s.country].filter(Boolean).join(" · ")}
                       </Text>
                     </View>
-                    <Ionicons name="chevron-forward" size={16} color="#6B6F78" />
+                    <Ionicons
+                      name="chevron-forward"
+                      size={16}
+                      color="#6B6F78"
+                    />
                   </Pressable>
                 </Animated.View>
               ))}

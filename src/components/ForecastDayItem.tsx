@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import type { DailyForecast } from "../types/weather";
 import { iconForCode } from "../lib/weatherIcons";
 import { formatTemp } from "../lib/formatters";
-import { HourlyStrip } from "./HourlyStrip";
+import HourlyStrip from "./HourlyStrip";
 
 interface Props {
   data: DailyForecast;
@@ -20,7 +20,7 @@ interface Props {
   onToggle: () => void;
 }
 
-export function ForecastDayItem({ data, index, expanded, onToggle }: Props) {
+const ForecastDayItem = ({ data, index, expanded, onToggle }: Props) => {
   const rotation = useSharedValue(0);
 
   useEffect(() => {
@@ -33,7 +33,9 @@ export function ForecastDayItem({ data, index, expanded, onToggle }: Props) {
 
   return (
     <Animated.View
-      entering={FadeInDown.delay(index * 80).springify().damping(14)}
+      entering={FadeInDown.delay(index * 80)
+        .springify()
+        .damping(14)}
       layout={LinearTransition.springify().damping(18)}
       style={{ borderCurve: "continuous" }}
       className="bg-white/65 border border-canvas-border rounded-2xl overflow-hidden"
@@ -51,7 +53,11 @@ export function ForecastDayItem({ data, index, expanded, onToggle }: Props) {
         </View>
 
         <View className="flex-row items-center gap-2 flex-1">
-          <Ionicons name={iconForCode(data.iconCode)} size={22} color="#2A2C33" />
+          <Ionicons
+            name={iconForCode(data.iconCode)}
+            size={22}
+            color="#2A2C33"
+          />
           <Text className="text-ink-soft text-sm" numberOfLines={1}>
             {data.condition}
           </Text>
@@ -98,4 +104,6 @@ export function ForecastDayItem({ data, index, expanded, onToggle }: Props) {
       )}
     </Animated.View>
   );
-}
+};
+
+export default ForecastDayItem;

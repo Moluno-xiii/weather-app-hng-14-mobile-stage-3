@@ -4,7 +4,7 @@ import type { ConditionGroup, WeatherIconCode } from "../types/weather";
 
 type IoniconName = ComponentProps<typeof Ionicons>["name"];
 
-export const iconForCode = (code: WeatherIconCode): IoniconName => {
+const iconForCode = (code: WeatherIconCode): IoniconName => {
   switch (code) {
     case "01d":
       return "sunny";
@@ -39,7 +39,7 @@ export const iconForCode = (code: WeatherIconCode): IoniconName => {
   }
 };
 
-export const groupForCode = (code: WeatherIconCode): ConditionGroup => {
+const groupForCode = (code: WeatherIconCode): ConditionGroup => {
   const isNight = code.endsWith("n");
   const head = code.slice(0, 2);
   switch (head) {
@@ -63,7 +63,7 @@ export const groupForCode = (code: WeatherIconCode): ConditionGroup => {
   }
 };
 
-export const gradientForGroup = (group: ConditionGroup): [string, string, string] => {
+const gradientForGroup = (group: ConditionGroup): [string, string, string] => {
   switch (group) {
     case "clear-day":
       return ["#FFD08A", "#F08A4B", "#A8451B"];
@@ -81,3 +81,5 @@ export const gradientForGroup = (group: ConditionGroup): [string, string, string
       return ["#D6D8DC", "#9CA0A8", "#5E626B"];
   }
 };
+
+export { gradientForGroup, groupForCode, iconForCode };

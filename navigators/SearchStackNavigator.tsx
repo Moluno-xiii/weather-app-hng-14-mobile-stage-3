@@ -1,13 +1,17 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import {
+  createNativeStackNavigator,
+  NativeStackNavigationProp,
+} from "@react-navigation/native-stack";
 import SearchScreen from "../screens/SearchScreen";
 import CityResultScreen from "../screens/CityResultScreen";
 
-export type SearchStackParamList = {
+type SearchStackParamList = {
   Search: undefined;
   CityResult: { name: string; country: string; lat: number; lon: number };
 };
 
 const Stack = createNativeStackNavigator<SearchStackParamList>();
+type SearchStackNavigatorProp = NativeStackNavigationProp<SearchStackParamList>;
 
 const SearchStackNavigator = () => {
   return (
@@ -33,4 +37,5 @@ const SearchStackNavigator = () => {
   );
 };
 
+export type { SearchStackParamList, SearchStackNavigatorProp };
 export default SearchStackNavigator;

@@ -6,7 +6,7 @@ interface Props {
   visible: boolean;
 }
 
-export function OfflineBanner({ visible }: Props) {
+const OfflineBanner = ({ visible }: Props) => {
   if (!visible) return null;
   return (
     <Animated.View
@@ -22,4 +22,6 @@ export function OfflineBanner({ visible }: Props) {
       </View>
     </Animated.View>
   );
-}
+};
+
+export default OfflineBanner;

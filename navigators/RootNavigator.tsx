@@ -1,14 +1,21 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {
+  BottomTabNavigationProp,
+  createBottomTabNavigator,
+} from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import HomeScreen from "../screens/HomeScreen";
-import SearchStackNavigator from "./SearchStackNavigator";
+import SearchStackNavigator, {
+  SearchStackParamList,
+} from "./SearchStackNavigator";
+import { NavigatorScreenParams } from "@react-navigation/native";
 
 type RootTabParamList = {
   home: undefined;
-  search: undefined;
+  search: NavigatorScreenParams<SearchStackParamList>;
 };
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
+type RootTabNavigatorProp = BottomTabNavigationProp<RootTabParamList>;
 
 const RootNavigator = () => {
   return (
@@ -48,5 +55,5 @@ const RootNavigator = () => {
   );
 };
 
-export type { RootTabParamList };
+export type { RootTabParamList, RootTabNavigatorProp };
 export default RootNavigator;

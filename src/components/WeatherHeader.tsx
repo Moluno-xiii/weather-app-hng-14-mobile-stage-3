@@ -9,7 +9,7 @@ interface Props {
   data: CurrentWeather;
 }
 
-export function WeatherHeader({ data }: Props) {
+const WeatherHeader = ({ data }: Props) => {
   const [c1, c2, c3] = gradientForGroup(data.group);
   return (
     <LinearGradient
@@ -87,4 +87,6 @@ export function WeatherHeader({ data }: Props) {
       </View>
     </LinearGradient>
   );
-}
+};
+
+export default WeatherHeader;

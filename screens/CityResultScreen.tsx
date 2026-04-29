@@ -1,13 +1,13 @@
-import { ScrollView, Text } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useRoute } from "@react-navigation/native";
 import type { RouteProp } from "@react-navigation/native";
-import { WeatherHeader } from "../src/components/WeatherHeader";
-import { CurrentDetailsGrid } from "../src/components/CurrentDetailsGrid";
-import { HourlyStrip } from "../src/components/HourlyStrip";
-import { ForecastList } from "../src/components/ForecastList";
-import { mockCityResult, mockDaily, mockHourly } from "../src/lib/mockWeather";
+import { useRoute } from "@react-navigation/native";
+import { ScrollView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import type { SearchStackParamList } from "../navigators/SearchStackNavigator";
+import CurrentDetailsGrid from "../src/components/CurrentDetailsGrid";
+import ForecastList from "../src/components/ForecastList";
+import HourlyStrip from "../src/components/HourlyStrip";
+import WeatherHeader from "../src/components/WeatherHeader";
+import { mockCityResult, mockDaily, mockHourly } from "../src/lib/mockWeather";
 
 type CityResultRoute = RouteProp<SearchStackParamList, "CityResult">;
 
@@ -19,7 +19,7 @@ const CityResultScreen = () => {
   };
 
   return (
-    <SafeAreaView edges={[]} className="flex-1 bg-convas">
+    <SafeAreaView edges={[]} className="flex-1 bg-canvas">
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: 20,

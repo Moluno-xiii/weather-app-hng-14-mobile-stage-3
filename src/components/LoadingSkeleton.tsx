@@ -20,7 +20,13 @@ const usePulse = () => {
   return useAnimatedStyle(() => ({ opacity: opacity.value }));
 };
 
-const Block = ({ className, style }: { className?: string; style?: object }) => {
+const Block = ({
+  className,
+  style,
+}: {
+  className?: string;
+  style?: object;
+}) => {
   const pulse = usePulse();
   return (
     <Animated.View
@@ -30,7 +36,7 @@ const Block = ({ className, style }: { className?: string; style?: object }) => 
   );
 };
 
-export function LoadingSkeleton() {
+const LoadingSkeleton = () => {
   return (
     <View className="gap-5">
       <Block className="h-56" />
@@ -50,4 +56,6 @@ export function LoadingSkeleton() {
       </View>
     </View>
   );
-}
+};
+
+export default LoadingSkeleton;

@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Text, View } from "react-native";
 import type { DailyForecast } from "../types/weather";
-import { ForecastDayItem } from "./ForecastDayItem";
+import ForecastDayItem from "./ForecastDayItem";
 
 interface Props {
   data: DailyForecast[];
 }
 
-export function ForecastList({ data }: Props) {
+const ForecastList = ({ data }: Props) => {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
   return (
@@ -31,4 +31,6 @@ export function ForecastList({ data }: Props) {
       </View>
     </View>
   );
-}
+};
+
+export default ForecastList;
