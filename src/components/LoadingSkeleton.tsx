@@ -1,24 +1,6 @@
-import { useEffect } from "react";
 import { View } from "react-native";
-import Animated, {
-  Easing,
-  useAnimatedStyle,
-  useSharedValue,
-  withRepeat,
-  withTiming,
-} from "react-native-reanimated";
-
-const usePulse = () => {
-  const opacity = useSharedValue(0.5);
-  useEffect(() => {
-    opacity.value = withRepeat(
-      withTiming(1, { duration: 900, easing: Easing.inOut(Easing.ease) }),
-      -1,
-      true,
-    );
-  }, [opacity]);
-  return useAnimatedStyle(() => ({ opacity: opacity.value }));
-};
+import Animated from "react-native-reanimated";
+import usePulse from "../hooks/usePulse";
 
 const Block = ({
   className,

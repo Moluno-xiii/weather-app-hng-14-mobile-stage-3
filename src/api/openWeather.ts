@@ -1,50 +1,19 @@
 import { OWMEndpoints } from "../lib/constants";
 import { groupForCode } from "../lib/weatherIcons";
 import type {
+  GeocodeSuggestion,
+  OWMCurrentResponse,
+  OWMForecastEntry,
+  OWMForecastResponse,
+  OWMGeocodeResult,
+} from "../types/openWeather";
+import type {
   CurrentWeather,
   DailyForecast,
   HourlySlot,
   WeatherIconCode,
 } from "../types/weather";
 import customTryCatch from "../utils/customTryCatch";
-
-interface OWMWeatherDescriptor {
-  id: number;
-  main: string;
-  description: string;
-  icon: string;
-}
-
-interface OWMMain {
-  temp: number;
-  feels_like: number;
-  humidity: number;
-  pressure: number;
-  temp_min: number;
-  temp_max: number;
-}
-
-interface OWMCurrentResponse {
-  name: string;
-  dt: number;
-  timezone: number;
-  sys: { country: string };
-  main: OWMMain;
-  wind: { speed: number };
-  weather: OWMWeatherDescriptor[];
-}
-
-interface OWMForecastEntry {
-  dt: number;
-  main: OWMMain;
-  wind: { speed: number };
-  weather: OWMWeatherDescriptor[];
-}
-
-interface OWMForecastResponse {
-  list: OWMForecastEntry[];
-  city: { name: string; country: string; timezone: number };
-}
 
 const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const MONTH_NAMES = [
@@ -167,11 +136,29 @@ const fetchForecast = (
 ): Promise<OWMForecastResponse> =>
   customTryCatch<OWMForecastResponse>(OWMEndpoints.forecastByCoords(lat, lon));
 
-export { fetchCurrent, fetchForecast, mapDaily, mapHourly, mapCurrent };
-export type {
-  OWMWeatherDescriptor,
-  OWMMain,
-  OWMCurrentResponse,
-  OWMForecastEntry,
-  OWMForecastResponse,
+const mapGeocode = (raw: OWMGeocodeResult[]): GeocodeSuggestion[] =>
+  raw.map((item) => ({
+    name: item.name,
+    lat: item.lat,
+    lon: item.lon,
+    country: item.country,
+    state: item.state ?? "",
+  }));
+
+const fetchGeocode = (
+  query: string,
+  limit: number = 5,
+): Promise<GeocodeSuggestion[]> =>
+  customTryCatch<OWMGeocodeResult[]>(OWMEndpoints.geocode(query, limit)).then(
+    mapGeocode,
+  );
+
+export {
+  fetchCurrent,
+  fetchForecast,
+  fetchGeocode,
+  mapCurrent,
+  mapDaily,
+  mapGeocode,
+  mapHourly,
 };

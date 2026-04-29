@@ -2,6 +2,7 @@ const OWM_BASE_URL = "https://api.openweathermap.org";
 const OWM_API_KEY = process.env.EXPO_PUBLIC_OWM_API_KEY ?? "";
 const OWM_UNITS = "metric";
 const TANSTACK_STALE_TIME = 10 * 60_000;
+const MIN_SEARCH_QUERY_LENGTH = 3;
 
 const buildQuery = (params: Record<string, string | number>): string =>
   Object.entries(params)
@@ -33,4 +34,9 @@ const OWMEndpoints = {
 
 const HOME_DEFAULT_COORDS = { lat: 6.5244, lon: 3.3792 } as const;
 
-export { HOME_DEFAULT_COORDS, OWMEndpoints, TANSTACK_STALE_TIME };
+export {
+  HOME_DEFAULT_COORDS,
+  OWMEndpoints,
+  TANSTACK_STALE_TIME,
+  MIN_SEARCH_QUERY_LENGTH,
+};

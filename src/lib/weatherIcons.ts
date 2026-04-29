@@ -63,6 +63,14 @@ const groupForCode = (code: WeatherIconCode): ConditionGroup => {
   }
 };
 
+const gradientForTemp = (temp: number): [string, string, string] => {
+  if (temp < 0) return ["#A8C8E8", "#6A8FB8", "#34527A"];
+  if (temp < 10) return ["#7FA9D6", "#4A78A8", "#1F3D63"];
+  if (temp < 20) return ["#9FD4C0", "#4EA08C", "#1F5E55"];
+  if (temp < 28) return ["#FFD08A", "#F08A4B", "#A8451B"];
+  return ["#FFB07A", "#E0512A", "#7A1F0A"];
+};
+
 const gradientForGroup = (group: ConditionGroup): [string, string, string] => {
   switch (group) {
     case "clear-day":
@@ -82,4 +90,4 @@ const gradientForGroup = (group: ConditionGroup): [string, string, string] => {
   }
 };
 
-export { gradientForGroup, groupForCode, iconForCode };
+export { gradientForGroup, gradientForTemp, groupForCode, iconForCode };
