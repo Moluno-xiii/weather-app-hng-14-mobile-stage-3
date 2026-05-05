@@ -7,7 +7,38 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "web:build": "expo export -p web"
+    "web:build": "expo export -p web",
+    "desktop:dev": "concurrently -k -n expo,electron -c blue,magenta \"BROWSER=none expo start --web\" \"wait-on http://localhost:8081 && ELECTRON_DEV=1 electron --no-sandbox electron/main.js\"",
+    "desktop:build:linux": "expo export -p web && electron-builder --linux AppImage",
+    "desktop:build:win": "expo export -p web && electron-builder --win nsis"
+  },
+  "build": {
+    "appId": "com.hng14.weatherapp",
+    "productName": "Weather",
+    "files": [
+      "electron/**",
+      "dist/**",
+      "package.json"
+    ],
+    "extraMetadata": {
+      "main": "electron/main.js"
+    },
+    "directories": {
+      "output": "release"
+    },
+    "linux": {
+      "target": ["AppImage"],
+      "category": "Utility"
+    },
+    "win": {
+      "target": ["nsis"]
+    }
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "electron",
+      "electron-winstaller"
+    ]
   },
   "dependencies": {
     "@expo/metro-runtime": "~6.1.2",
@@ -36,7 +67,11 @@
   },
   "devDependencies": {
     "@types/react": "~19.1.0",
-    "typescript": "~5.9.2"
+    "concurrently": "^9.2.1",
+    "electron": "^41.5.0",
+    "electron-builder": "^26.8.1",
+    "typescript": "~5.9.2",
+    "wait-on": "^9.0.5"
   },
   "private": true
 }

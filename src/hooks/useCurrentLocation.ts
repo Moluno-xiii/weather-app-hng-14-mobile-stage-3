@@ -24,6 +24,24 @@ const useCurrentLocation = (): UseCurrentLocationResult => {
     setStatus("loading");
     setError(null);
     try {
+      const isElectron =
+        typeof window !== "undefined" && "electronAPI" in window;
+
+      if (isElectron) {
+        const res = await fetch("https://ipapi.co/json/");
+        if (!res.ok) throw new Error("IP location lookup failed");
+        const data: { latitude?: number; longitude?: number } = await res.json();
+        if (
+          typeof data.latitude !== "number" ||
+          typeof data.longitude !== "number"
+        ) {
+          throw new Error("Invalid IP location response");
+        }
+        setCoords({ lat: data.latitude, lon: data.longitude });
+        setStatus("granted");
+        return;
+      }
+
       const permission = await Location.requestForegroundPermissionsAsync();
       if (permission.status !== "granted") {
         setStatus("denied");
