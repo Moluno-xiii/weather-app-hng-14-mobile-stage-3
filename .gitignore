@@ -44,3 +44,4 @@ yarn-error.*
 /todo/
 .env
 eas.json
+todo.txt

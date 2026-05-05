@@ -40,7 +40,7 @@ const useHomeWeather = (coords: Coords | null) => {
   };
 
   return {
-    current: current.data,
+    current: current?.data,
     daily: forecast.data?.daily,
     hourly: forecast.data?.hourly,
     isLoading: enabled && (current.isLoading || forecast.isLoading),

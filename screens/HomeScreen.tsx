@@ -1,4 +1,4 @@
-import { ScrollView, RefreshControl } from "react-native";
+import { ScrollView, RefreshControl, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import WeatherHeader from "../src/components/WeatherHeader";
 import CurrentDetailsGrid from "../src/components/CurrentDetailsGrid";
@@ -34,11 +34,7 @@ const HomeScreen = () => {
     <SafeAreaView edges={["top"]} className="flex-1 bg-canvas">
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        contentContainerStyle={{
-          paddingHorizontal: 20,
-          paddingBottom: 32,
-          gap: 24,
-        }}
+        contentContainerStyle={{ paddingBottom: 32 }}
         refreshControl={
           <RefreshControl
             refreshing={isRefetching}
@@ -47,26 +43,36 @@ const HomeScreen = () => {
           />
         }
       >
-        <HomeScreenHeader />
-        {showPermissionDenied ? (
-          <ErrorState
-            kind="permissionDenied"
-            onRetry={() => void requestLocation()}
-          />
-        ) : showLocationError ? (
-          <ErrorState kind="generic" onRetry={() => void requestLocation()} />
-        ) : showSkeleton ? (
-          <LoadingSkeleton />
-        ) : isError || !current || !daily || !hourly ? (
-          <ErrorState kind="generic" onRetry={onRefresh} />
-        ) : (
-          <>
-            <WeatherHeader data={current} />
-            <CurrentDetailsGrid data={current} />
-            <HourlyStrip data={hourly} />
-            <ForecastList data={daily} />
-          </>
-        )}
+        <View
+          style={{
+            width: "100%",
+            maxWidth: 900,
+            alignSelf: "center",
+            paddingHorizontal: 20,
+            gap: 24,
+          }}
+        >
+          <HomeScreenHeader />
+          {showPermissionDenied ? (
+            <ErrorState
+              kind="permissionDenied"
+              onRetry={() => void requestLocation()}
+            />
+          ) : showLocationError ? (
+            <ErrorState kind="generic" onRetry={() => void requestLocation()} />
+          ) : showSkeleton ? (
+            <LoadingSkeleton />
+          ) : isError || !current || !daily || !hourly ? (
+            <ErrorState kind="generic" onRetry={onRefresh} />
+          ) : (
+            <>
+              <WeatherHeader data={current} />
+              <CurrentDetailsGrid data={current} />
+              <HourlyStrip data={hourly} />
+              <ForecastList data={daily} />
+            </>
+          )}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

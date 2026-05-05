@@ -46,11 +46,11 @@ const CurrentDetailsGrid = ({ data }: Props) => {
           style={{ borderCurve: "continuous" }}
           className="flex-1 min-w-[46%] bg-white/70 border border-canvas-border rounded-2xl px-4 py-4"
         >
-          <View className="flex-row items-center gap-2">
+          <View className="flex-row  items-center grid gap-2">
             <Ionicons name={c.icon} size={14} color="#6B6F78" />
             <Text
               style={{ letterSpacing: 1.5 }}
-              className="text-ink-muted text-[10px] uppercase font-semibold"
+              className="text-ink-muted text-[10px] flex uppercase font-semibold"
             >
               {c.label}
             </Text>

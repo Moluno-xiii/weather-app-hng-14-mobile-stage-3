@@ -20,3 +20,4 @@ const usePulse = () => {
 };
 
 export default usePulse;
+// use css animation.

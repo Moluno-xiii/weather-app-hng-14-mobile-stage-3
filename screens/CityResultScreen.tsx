@@ -1,7 +1,7 @@
 import type { RouteProp } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
 import { useMemo } from "react";
-import { RefreshControl, ScrollView } from "react-native";
+import { RefreshControl, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import type { SearchStackParamList } from "../navigators/SearchStackNavigator";
 import CurrentDetailsGrid from "../src/components/CurrentDetailsGrid";
@@ -31,11 +31,7 @@ const CityResultScreen = () => {
   return (
     <SafeAreaView edges={[]} className="flex-1 bg-canvas">
       <ScrollView
-        contentContainerStyle={{
-          paddingHorizontal: 20,
-          paddingBottom: 32,
-          gap: 24,
-        }}
+        contentContainerStyle={{ paddingBottom: 32 }}
         refreshControl={
           <RefreshControl
             refreshing={isRefetching}
@@ -44,18 +40,28 @@ const CityResultScreen = () => {
           />
         }
       >
-        {isLoading ? (
-          <LoadingSkeleton />
-        ) : isError || !headerData || !daily || !hourly ? (
-          <ErrorState kind="generic" onRetry={onRefresh} />
-        ) : (
-          <>
-            <WeatherHeader data={headerData} />
-            <CurrentDetailsGrid data={headerData} />
-            <HourlyStrip data={hourly} />
-            <ForecastList data={daily} />
-          </>
-        )}
+        <View
+          style={{
+            width: "100%",
+            maxWidth: 900,
+            alignSelf: "center",
+            paddingHorizontal: 20,
+            gap: 24,
+          }}
+        >
+          {isLoading ? (
+            <LoadingSkeleton />
+          ) : isError || !headerData || !daily || !hourly ? (
+            <ErrorState kind="generic" onRetry={onRefresh} />
+          ) : (
+            <>
+              <WeatherHeader data={headerData} />
+              <CurrentDetailsGrid data={headerData} />
+              <HourlyStrip data={hourly} />
+              <ForecastList data={daily} />
+            </>
+          )}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
